@@ -94,6 +94,7 @@ class Module(ModuleManager.BaseModule):
             stderr.write("%s: %s" % (user.nickname, message))
 
     @utils.hook("received.command.bef", alias_of="befriend")
+    @utils.hook("received.command.bang", alias_of="befriend")
     @utils.hook("received.command.befriend")
     @utils.kwarg("help", "Befriend a duck")
     @utils.spec("!-channelonly")
@@ -104,7 +105,8 @@ class Module(ModuleManager.BaseModule):
             event["stdout"].write(action)
         else:
             self._no_duck(event["target"], event["user"], event["stderr"])
-
+    
+    @utils.hook("received.command.cook", alias_of="trap")
     @utils.hook("received.command.trap")
     @utils.kwarg("help", "Trap a duck")
     @utils.spec("!-channelonly")
@@ -207,3 +209,18 @@ class Module(ModuleManager.BaseModule):
             "%s has befriended %d and trapped %d ducks%s" %
             (target_user.nickname, overall["bef"], overall["trap"],
             current_str))
+
+    @utils.hook("received.command.release")
+    @utils.kwarg("help", "Release a trapped duck")
+    @utils.spec("!-channelonly")
+    def release(self, event):
+        user_id = event["user"].get_id()
+        channel = event["target"]
+        trapped_ducks = channel.get_user_setting(user_id, "ducks-shot")
+        if trapped_ducks and trapped_ducks > 0:
+            trapped_ducks -= 1
+            channel.set_user_setting(user_id, "ducks-shot", trapped_ducks)
+            event["stdout"].write("%s released a duck!" % event["user"].nickname)
+            self._trigger_duck(channel)
+        else:
+            event["stderr"].write("You don't have any trapped ducks!")
