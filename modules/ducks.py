@@ -4,7 +4,9 @@
 import random, re, time
 from src import EventManager, ModuleManager, utils
 
-DUCK = "・゜゜・。。・゜゜\_o< QUACK!"
+DUCKS = ["・゜゜・。。・゜゜\_o< Bockaaaaw!", "・゜゜・。。・゜゜\_o< duck.", "Is that... Is that a duck?", "・゜゜・。。・゜゜\_o< QUACK!"]
+
+DUCK = (random.choice(DUCKS))
 
 DEFAULT_MIN_MESSAGES = 100
 
