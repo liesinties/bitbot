@@ -6,8 +6,6 @@ from src import EventManager, ModuleManager, utils
 
 DUCKS = ["・゜゜・。。・゜゜\_o< Bockaaaaw!", "・゜゜・。。・゜゜\_o< duck.", "Is that... Is that a duck?", "・゜゜・。。・゜゜\_o< QUACK!"]
 
-DUCK = (random.choice(DUCKS))
-
 DEFAULT_MIN_MESSAGES = 100
 
 @utils.export("channelset", utils.BoolSetting("ducks-enabled",
@@ -63,7 +61,7 @@ class Module(ModuleManager.BaseModule):
         channel = timer.kwargs["channel"]
         channel.duck_active = time.time()
         channel.duck_lines = 0
-        channel.send_message(DUCK)
+        channel.send_message(random.choice(DUCKS))
 
     def _duck_action(self, channel, user, action, setting):
         duck_timestamp = channel.duck_active
